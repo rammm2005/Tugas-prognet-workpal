@@ -1,15 +1,15 @@
 import { Link, useForm } from '@inertiajs/react';
 import React, { useState, useEffect } from 'react';
-import { FiMenu, FiChevronDown, FiClock, FiEye, FiShield, FiZap, FiActivity } from 'react-icons/fi';
+import { FiMenu, FiChevronDown, FiClock, FiEye, FiShield, FiZap, FiActivity, FiSearch } from 'react-icons/fi';
 
 export default function Navbar({ user }) {
     const { post, processing } = useForm();
-
     const [menuOpen, setMenuOpen] = useState(false);
     const [productMenuOpen, setProductMenuOpen] = useState(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [imgSrc, setImgSrc] = useState(user?.profile_picture || '');
     const placeholder = 'https://via.placeholder.com/96';
+    const [searchTerm, setSearchTerm] = useState('');
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
     const toggleProductMenu = () => setProductMenuOpen(!productMenuOpen);
@@ -36,15 +36,40 @@ export default function Navbar({ user }) {
 
     const initials = user?.name.charAt(0).toUpperCase();
 
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        console.log(searchTerm);
+    };
+
     return (
         <header className="bg-white shadow-md">
-            <nav className="mx-auto flex flex-row max-w-full items-center justify-between p-6 px-10 lg:px-20" aria-label="Global">
+            <nav className="mx-auto flex flex-row max-w-full items-center justify-between py-2 px-10 lg:px-20" aria-label="Global">
                 <div className="flex lg:flex-1">
                     <a href="#" className="-m-1.5 p-1.5">
                         <span className="sr-only">Workpal</span>
-                        <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+                        <img className="h-20 w-auto" src="./assets/images/logo/logo.png" alt="Workpal Company" />
                     </a>
                 </div>
+
+                <div className="hidden lg:flex lg:flex-1 justify-center items-center mr-8">
+                    <form onSubmit={handleSearch} className="relative flex items-center w-full max-w-lg bg-white rounded-full shadow-md">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Telusuri Freelance Kami..."
+                            className="border-2 border-slate-100 rounded-full py-3 px-5 pr-12 w-full focus:outline-none focus:ring-2 transition duration-200 text-gray-800 placeholder-gray-400"
+                        />
+                        <button
+                            type="submit"
+                            className="absolute right-2 p-2 rounded-full bg-green-600 hover:bg-green-700 focus:outline-none transition duration-200"
+                        >
+                            <FiSearch className="text-white h-5 w-5" />
+                        </button>
+                    </form>
+                </div>
+
+
 
                 <div className="flex lg:hidden">
                     <button
@@ -62,14 +87,14 @@ export default function Navbar({ user }) {
                     <div className="relative">
                         <button
                             type="button"
-                            className="flex mr-6 items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
+                            className="flex items-center gap-x-1 mr-8 text-sm font-semibold leading-6 text-gray-900"
                             onClick={toggleProductMenu}
                         >
-                            Product
+                            Jelajahi
                             <FiChevronDown className={`h-5 w-5 flex-none text-gray-400 transform ${productMenuOpen ? 'rotate-180' : ''}`} />
                         </button>
                         {productMenuOpen && (
-                            <div className="absolute -right-9 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                            <div className="absolute -right-9 top-full z-20 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                                 <div className="p-4">
                                     {/* Product Links */}
                                     <ProductLink icon={FiClock} title="Analytics" description="Get a better understanding of your traffic" />
@@ -82,6 +107,10 @@ export default function Navbar({ user }) {
                         )}
                     </div>
                 </div>
+
+                <Link href="/freelance" className="text-sm font-semibold leading-6 text-gray-900 mr-8">
+                    Daftar Freelance
+                </Link>
 
                 <div className='relative flex flex-row items-center gap-3'>
                     {user ? (
@@ -110,7 +139,6 @@ export default function Navbar({ user }) {
                                             Profile
                                         </Link>
                                         <button
-
                                             onClick={handleLogout}
                                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                         >
