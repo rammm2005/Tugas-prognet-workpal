@@ -1,6 +1,4 @@
-import { Link } from '@inertiajs/react';
-import Footer from '@/Components/Footer/Footer';
-import Navbar from '@/Components/Navbar/Navbar';
+import sidebar from "./sidebar";
 // import usePage from '@inertiajs/react';
 
 export default function Authenticated({ children, user }) {
@@ -8,9 +6,9 @@ export default function Authenticated({ children, user }) {
 
         <>
             <div className='w-full'>
-                <Navbar user={user} />
+               <sidebar>
                 {children}
-                <Footer />
+               </sidebar>
             </div>
         </>
     );

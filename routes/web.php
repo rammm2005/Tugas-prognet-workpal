@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\Freelance\FreelanceAuthController;
 use App\Http\Controllers\Auth\User\AuthController;
 use App\Http\Controllers\Auth\User\UserProfileController;
@@ -32,6 +33,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('Welcome');
+
+
+Route::resource('/page/admin', AdminController::class);
 
 
 Route::prefix('auth')->group(function () {
