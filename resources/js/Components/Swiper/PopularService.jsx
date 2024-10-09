@@ -23,7 +23,7 @@ const Popular = [
     },
     {
         image: 'https://fiverr-res.cloudinary.com/q_auto,f_auto,w_188,dpr_1.0/v1/attachments/generic_asset/asset/798403f5b92b1b5af997acc704a3d21c-1702465156473/architecture-design.png',
-        name: 'Architecture Design and Interior',
+        name: 'Architecture Design',
         slug: "Website-development",
 
     },
@@ -59,7 +59,7 @@ const Popular = [
     },
     {
         image: 'https://fiverr-res.cloudinary.com/q_auto,f_auto,w_188,dpr_1.0/v1/attachments/generic_asset/asset/798403f5b92b1b5af997acc704a3d21c-1702465156473/architecture-design.png',
-        name: 'Architecture Design and Interior',
+        name: 'Architecture Design',
         slug: "Website-development",
 
     },
@@ -84,8 +84,9 @@ const PopularService = () => {
     const [color, setColor] = useState('#00732e');
 
     function generateColor() {
-        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-        setColor('#' + randomColor);
+        var myColors = ['red', 'purple', '#E84751', 'blue', 'orange', '#323643', '#97FF73', '#362EFF', '#FF6513'];
+        var randomize = Math.floor(Math.random() * myColors.length);
+        setColor('' + randomColor);
     }
 
     const handlePrevClick = () => {
@@ -98,7 +99,7 @@ const PopularService = () => {
 
 
     return (
-        <div className="relative top-0 z-20 px-6 sm:px-20 transition-all duration-300">
+        <div className="relative top-0 z-20 px-6 sm:px-10 transition-all duration-300">
             <div className="container mx-auto mt-20 sm:mt-32 relative">
                 <div className="px-4 flex flex-col gap-2">
                     <h5 className="text-2xl sm:text-4xl font-inter font-semibold">Service Populer</h5>
@@ -116,7 +117,7 @@ const PopularService = () => {
 
                     <Swiper
                         spaceBetween={10}
-                        slidesPerView={3}
+                        slidesPerView={5}
                         breakpoints={{
                             320: {
                                 slidesPerView: 1,
@@ -131,7 +132,7 @@ const PopularService = () => {
                                 slidesPerView: 3,
                             },
                             1280: {
-                                slidesPerView: 4,
+                                slidesPerView: 5,
                             },
                         }}
                         onSwiper={(swiper) => {
@@ -159,7 +160,7 @@ const PopularService = () => {
                                         <span className="sm:text-lg text-base font-bold capitalize text-left font-inter">
                                             {blog.name}
                                         </span>
-                                        <div className="relative w-full h-72">
+                                        <div className="relative w-full">
                                             <img
                                                 className="inset-0 w-[10rem] h-[10rem] object-cover rounded-xl hover:opacity-90 transition duration-300"
                                                 src={blog.image}
