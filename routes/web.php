@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\Freelance\FreelanceAuthController;
 use App\Http\Controllers\Auth\User\AuthController;
 use App\Http\Controllers\Auth\User\UserProfileController;
+use App\Http\Controllers\Freelance\FreelanceController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use Inertia\Inertia;
@@ -36,6 +37,13 @@ Route::get('/', function () {
 
 
 Route::resource('/page/admin', AdminController::class);
+
+
+Route::prefix('/page/freelance/')->group(function () {
+    // Free Page
+    Route::get('dashboard', [FreelanceController::class, 'Index'])->name('free.dashboard');
+});
+
 
 
 Route::prefix('auth')->group(function () {

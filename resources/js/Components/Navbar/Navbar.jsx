@@ -108,7 +108,7 @@ export default function Navbar({ user }) {
                     </div>
                 </div>
 
-                <Link href="/freelance" className="text-sm font-semibold leading-6 text-gray-900 mr-8">
+                <Link href={route('auth.freeAuthLogin')} className="text-sm font-semibold leading-6 text-gray-900 mr-8">
                     Daftar Freelance
                 </Link>
 
