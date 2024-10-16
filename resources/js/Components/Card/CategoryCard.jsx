@@ -139,7 +139,7 @@ export const CategoryCard = () => {
                         {categories.map((data, index) => (
                             <>
                                 <SwiperSlide key={index}>
-                                    <article className='flex flex-col font-inter gap-3 cursor-pointer hover:scale-110 transition-all ease-in-out duration-300 items-start justify-start shadow-md rounded-lg p-4'>
+                                    <article className='flex flex-col carder-is font-inter gap-3 cursor-pointer hover:scale-110 transition-all ease-in-out duration-300 items-start justify-start shadow-md rounded-lg p-4'>
                                         <span className='text-4xl font-light'>
                                             {data.icon}
                                         </span>

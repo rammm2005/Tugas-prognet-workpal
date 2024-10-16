@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.carder-is::before {
+    background: radial-gradient(63.44% 63.44% at 50% 50%, #c2ffe2 0, #fff 100%), #fff;
+    border-radius: 16px;
+    bottom: 0;
+    content: "";
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -webkit-transition: opacity .25s cubic-bezier(.75, 0, .25, 1);
+    transition: opacity .25s cubic-bezier(.75, 0, .25, 1);
+    z-index: -1;
+}

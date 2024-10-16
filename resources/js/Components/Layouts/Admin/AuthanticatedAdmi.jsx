@@ -12,9 +12,9 @@ export default function AuthenticatedAdmin({ title, children, user }) {
     return (
         <>
             <Head title={title} />
-            <Navbar toggleSidebar={toggleSidebar} />
+            <Navbar toggleSidebar={toggleSidebar} user={user} />
             <Sidebar sidebarOpen={sidebarOpen} />
-            <div className={`ml-64 pt-20 transition-all ${sidebarOpen ? 'block' : 'hidden'}`}>
+            <div className={`pt-20 transition-all ${sidebarOpen ? 'relative mt-10 ml-64 px-4' : 'relative mt-10 ml-4 px-4'}`}>
                 {children}
             </div>
         </>

@@ -83,9 +83,9 @@ const ImageGrid = () => {
         <div className="container mx-auto p-8">
             <h1 className="text-4xl font-bold mb-10">Di Buat Oleh Freelance Workpal.</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {imageData.map((item) => (
+                {imageData.map((item, index) => (
                     <div
-                        key={item.id}
+                        key={index}
                         className="relative bg-white shadow cursor-pointer rounded-lg overflow-hidden group transform transition-all duration-500 ease-in-out hover:scale-105"
                     >
                         <img

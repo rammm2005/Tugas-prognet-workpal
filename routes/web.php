@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\Freelance\FreelanceAuthController;
 use App\Http\Controllers\Auth\User\AuthController;
@@ -36,7 +37,11 @@ Route::get('/', function () {
 })->name('Welcome');
 
 
-Route::resource('/page/admin', AdminController::class);
+
+Route::middleware(['auth', 'role:admin'])->prefix('page/credential/admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.index');
+    Route::resource('categories', CategoryController::class);
+});
 
 
 Route::prefix('/page/freelance/')->group(function () {
