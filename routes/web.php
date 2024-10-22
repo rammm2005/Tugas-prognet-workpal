@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\SkillLevelController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\Freelance\FreelanceAuthController;
 use App\Http\Controllers\Auth\User\AuthController;
@@ -41,6 +42,12 @@ Route::get('/', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('page/credential/admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.index');
     Route::resource('categories', CategoryController::class);
+    Route::patch('/categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
+
+    Route::resource('skill', SkillLevelController::class);
+    Route::patch('/skill/{id}/restore', [SkillLevelController::class, 'restore'])->name('skill.restore');
+
+
 });
 
 

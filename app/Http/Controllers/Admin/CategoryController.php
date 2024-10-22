@@ -18,8 +18,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
+        $deletedCategories = Category::onlyTrashed()->get();
+        $parentCategories = Category::where('order', 1)->get();
         return Inertia::render('Admin/Category/Index', [
             'categories' => $categories,
+            'parentCategories' => $parentCategories,
+            'deletedCategories' => $deletedCategories
         ]);
     }
 
@@ -33,16 +37,19 @@ class CategoryController extends Controller
             'description' => 'nullable|string',
             'slug' => 'nullable|string|unique:categories,slug',
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'parent_id' => 'nullable|integer',
+            'parent_id' => 'nullable|uuid',
             'order' => 'nullable|integer',
             'status' => 'boolean',
         ]);
 
         $slug = Str::slug($request->name);
 
+        $parentCategory = Category::where('order', 1)->first();
+
         $data = $request->all();
         $data['name'] = strip_tags($data['name']);
         $data['description'] = strip_tags($data['description']);
+        $data['parent_id'] = $parentCategory ? $parentCategory->id : null;
 
         if ($request->hasFile('image_url')) {
             $imagePath = $request->file('image_url')->store('images/categories', 'public');
@@ -69,14 +76,31 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'slug' => 'required|string|unique:categories,slug,' . $category->id,
-            'parent_id' => 'nullable|integer',
+            'parent_id' => 'nullable|uuid',
             'order' => 'nullable|integer',
             'status' => 'boolean',
         ]);
 
-        $category->update($request->all());
+        $name = strip_tags($request->name);
+        $description = strip_tags($request->description);
+
+        $category->update([
+            'name' => $name,
+            'description' => $description,
+            'slug' => Str::slug($name),
+            'parent_id' => $request->parent_id,
+            'order' => $request->order ?? 0,
+            'status' => $request->status ?? false,
+        ]);
+
+        if ($request->hasFile('image_url')) {
+            $imagePath = $request->file('image_url')->store('images/categories', 'public');
+            $category->update(['image_url' => $imagePath]);
+        }
+
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
+
 
     public function destroy(Category $category)
     {

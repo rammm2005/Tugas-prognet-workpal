@@ -2,46 +2,40 @@ import React, { useState } from 'react';
 import { router, useForm, usePage } from '@inertiajs/react';
 import Table from '@/Components/Table/Table';
 import CustomModal from '@/Components/Modals/Modal';
-import AuthenticatedAdmin from "@/Components/Layouts/Admin/AuthanticatedAdmi";
-import ImageUpload from '@/Components/Upload/ImageUpload';
+import AuthenticatedAdmin from '@/Components/Layouts/Admin/AuthanticatedAdmi';
 import { FaHistory } from "react-icons/fa";
 import { LiaTrashRestoreAltSolid } from "react-icons/lia";
 import { IoMdAdd } from "react-icons/io";
 
-export default function CategoryIndex() {
-    const { categories, deletedCategories, parentCategories, flash, auth } = usePage().props;
+export default function SkillIndex() {
+    const { skills, deletedskills, flash, auth } = usePage().props;
     const [open, setOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [categoryId, setCategoryId] = useState(null);
+    const [skillId, setSkillId] = useState(null);
     const [deletedOpen, setDeletedOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-    const [categoryToDelete, setCategoryToDelete] = useState(null);
+    const [skillToDelete, setSkillToDelete] = useState(null);
     const [confirmRestoreOpen, setConfirmRestoreOpen] = useState(false);
-    const [categoryToRestore, setCategoryToRestore] = useState(null);
-
-
+    const [skillToRestore, setSkillToRestore] = useState(null);
 
     const { data, setData, post, put, reset, errors } = useForm({
         name: '',
         description: '',
-        parent_id: '',
-        order: '',
-        image_url: '',
-        status: false,
+        icon: '',
+        level: '',
     });
 
-    const handleOpen = (category = null) => {
-        if (category) {
+    console.log(skills);
+
+    const handleOpen = (skill = null) => {
+        if (skill) {
             setEditMode(true);
-            setCategoryId(category.id);
+            setSkillId(skill.id);
             setData({
-                name: category.name,
-                description: category.description,
-                slug: category.slug,
-                parent_id: category.parent_id,
-                order: category.order,
-                status: category.status,
-                image_url: category.image_url || '',
+                name: skill.name,
+                description: skill.description,
+                icon: skill.icon,
+                level: skill.level,
             });
         } else {
             setEditMode(false);
@@ -58,19 +52,19 @@ export default function CategoryIndex() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editMode) {
-            put(route('categories.update', categoryId), {
+            put(route('skill.update', skillId), {
                 onSuccess: () => handleClose(),
             });
         } else {
-            post(route('categories.store'), {
+            post(route('skill.store'), {
                 onSuccess: () => handleClose(),
             });
         }
     };
 
     const confirmDelete = () => {
-        if (categoryToDelete) {
-            router.delete(route('categories.destroy', categoryToDelete), {
+        if (skillToDelete) {
+            router.delete(route('skill.destroy', skillToDelete), {
                 onSuccess: () => {
                     setConfirmDeleteOpen(false);
                 },
@@ -80,20 +74,19 @@ export default function CategoryIndex() {
         }
     };
 
-
     const handleDelete = (id) => {
-        setCategoryToDelete(id);
+        setSkillToDelete(id);
         setConfirmDeleteOpen(true);
     };
 
     const handleRestore = (id) => {
-        setCategoryToRestore(id);
+        setSkillToRestore(id);
         setConfirmRestoreOpen(true);
     };
 
     const confirmRestore = () => {
-        if (categoryToRestore) {
-            router.patch(route('categories.restore', categoryToRestore), {
+        if (skillToRestore) {
+            router.patch(route('skill.restore', skillToRestore), {
                 onSuccess: () => {
                     setConfirmRestoreOpen(false);
                 },
@@ -103,13 +96,10 @@ export default function CategoryIndex() {
         }
     };
 
-
-
     const deletedColumns = [
         { label: 'Name', accessor: 'name', },
-        { label: 'Order', accessor: 'order', render: (row) => <span>{row.order ? 'Main Category' : 'Sub Category'}</span>, },
         {
-            label: 'Triger', accessor: 'restore', render: (row) => (
+            label: 'Trigger', accessor: 'restore', render: (row) => (
                 <button
                     className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
                     onClick={() => handleRestore(row.id)}
@@ -123,17 +113,15 @@ export default function CategoryIndex() {
     const columns = [
         { label: 'UUID', accessor: 'id', columnWidths: 100 },
         { label: 'Name', accessor: 'name', },
-        { label: 'Slug', accessor: 'slug', },
-        { label: 'Order', accessor: 'order', render: (row) => <span>{row.order ? 'Main Category' : 'Sub Category'}</span>, },
-        { label: 'Active', accessor: 'status', render: (row) => <span>{row.status ? 'active' : 'In active'}</span>, },
+        { label: 'Level', accessor: 'level', },
     ];
 
     return (
         <>
-            <AuthenticatedAdmin title='Admin Category' user={auth.user}>
+            <AuthenticatedAdmin title='Admin Skill' user={auth.user}>
                 <div className="p-6">
                     <div className='flex flex-row justify-between items-center'>
-                        <h1 className="text-2xl font-bold mb-4">Category List</h1>
+                        <h1 className="text-2xl font-bold mb-4">Skill List</h1>
 
                         <div className='flex flex-row items-center gap-3'>
                             <button
@@ -141,7 +129,7 @@ export default function CategoryIndex() {
                                 onClick={() => handleOpen()}
                             >
                                 <IoMdAdd />
-                                Add New Category
+                                Add New Skill
                             </button>
 
                             <button
@@ -151,7 +139,6 @@ export default function CategoryIndex() {
                                 <FaHistory />
                                 Restored
                             </button>
-
                         </div>
                     </div>
 
@@ -161,20 +148,18 @@ export default function CategoryIndex() {
                         </div>
                     )}
 
-
                     <Table
                         columns={columns}
-                        data={categories}
+                        data={skills}
                         onEdit={handleOpen}
                         onDelete={handleDelete}
                     />
 
-
-                    <CustomModal isOpen={deletedOpen} id="modal-deleted" onRequestClose={() => setDeletedOpen(false)} title="Deleted Categories">
+                    <CustomModal isOpen={deletedOpen} id="modal-deleted" onRequestClose={() => setDeletedOpen(false)} title="Deleted Skills">
                         <div className="overflow-x-auto">
                             <Table
                                 columns={deletedColumns}
-                                data={deletedCategories}
+                                data={deletedskills}
                                 action={false}
                             />
                         </div>
@@ -186,9 +171,8 @@ export default function CategoryIndex() {
                         </button>
                     </CustomModal>
 
-
                     <CustomModal isOpen={confirmDeleteOpen} id="modal-delete-confirmation" onRequestClose={() => setConfirmDeleteOpen(false)} title="Confirm Deletion">
-                        <p>Are you sure you want to delete this category?</p>
+                        <p>Are you sure you want to delete this skill?</p>
                         <div className="flex justify-end mt-4">
                             <button
                                 className="bg-red-500 text-white px-4 py-2 rounded mr-2"
@@ -205,9 +189,8 @@ export default function CategoryIndex() {
                         </div>
                     </CustomModal>
 
-
                     <CustomModal isOpen={confirmRestoreOpen} id="modal-restore-confirmation" onRequestClose={() => setConfirmRestoreOpen(false)} title="Confirm Restoration">
-                        <p>Are you sure you want to restore this category?</p>
+                        <p>Are you sure you want to restore this skill?</p>
                         <div className="flex justify-end mt-4">
                             <button
                                 className="bg-green-500 text-white px-4 py-2 rounded mr-2"
@@ -224,8 +207,7 @@ export default function CategoryIndex() {
                         </div>
                     </CustomModal>
 
-
-                    <CustomModal isOpen={open} id="modal-c" onRequestClose={handleClose} title={editMode ? 'Edit Category' : 'Add Category'}>
+                    <CustomModal isOpen={open} id="modal-skill" onRequestClose={handleClose} title={editMode ? 'Edit Skill' : 'Add Skill'}>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium mb-1" htmlFor="name">
@@ -255,74 +237,25 @@ export default function CategoryIndex() {
                                 {errors.description && <div className="text-red-600">{errors.description}</div>}
                             </div>
 
-                            {data.order === 0 ? (
-                                <>
-                                    <div className="mb-4">
-                                        <label className="block text-sm font-medium mb-1" htmlFor="parent_id">
-                                            Parent Category (ID)
-                                        </label>
-                                        <select
-                                            id="parent_id"
-                                            className="w-full border border-slate-200 px-3 py-2 rounded"
-                                            value={data.parent_id || ''}
-                                            onChange={(e) => setData('parent_id', e.target.value)}
-                                        >
-                                            <option value="">Select Parent Category</option>
-                                            {parentCategories.map((category) => (
-                                                <option key={category.id} value={category.id}>
-                                                    {category.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.parent_id && <div className="text-red-600">{errors.parent_id}</div>}
-                                    </div>
-                                </>
-                            ) : null}
-
-
-
                             <div className="mb-4">
-                                <ImageUpload
-                                    name="image_url"
-                                    existingImageUrl={data.image_url ? `/storage/${data.image_url}` : null}
-                                    onChange={(file) => setData('image_url', file)}
-                                />
-                                {errors.image_url && <div className="text-red-600">{errors.image_url}</div>}
+                                <label className="block text-sm font-medium mb-1" htmlFor="level">
+                                    Level
+                                </label>
+                                <select
+                                    id="level"
+                                    className="w-full border border-slate-200 px-3 py-2 rounded"
+                                    value={data.level}
+                                    onChange={(e) => setData('level', e.target.value)}
+                                    required
+                                >
+                                    <option value="">Select Level</option>
+                                    <option value="beginner">Beginner</option>
+                                    <option value="intermediate">Intermediate</option>
+                                    <option value="expert">Expert</option>
+                                </select>
+                                {errors.level && <div className="text-red-600">{errors.level}</div>}
                             </div>
 
-                            <div className='flex flex-row gap-4 mt-5'>
-                                <div className="mb-4 flex items-center">
-                                    <label className="inline-flex items-center cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            value=""
-                                            className="sr-only peer"
-                                            checked={data.order === 1}
-                                            onChange={(e) => setData('order', e.target.checked ? 1 : 0)}
-                                        />
-                                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
-                                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                            {data.order === 1 ? 'Main Category' : 'Sub Category'}
-                                        </span>
-                                    </label>
-                                    {errors.order && <div className="text-red-600">{errors.order}</div>}
-                                </div>
-
-                                <div className="mb-4 flex items-center">
-                                    <label className="inline-flex items-center cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            value=""
-                                            className="sr-only peer"
-                                            checked={data.status === 1}
-                                            onChange={(e) => setData('status', e.target.checked ? 1 : 0)}
-                                        />
-                                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
-                                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Active</span>
-                                    </label>
-                                    {errors.status && <div className="text-red-600">{errors.status}</div>}
-                                </div>
-                            </div>
 
                             <div className="flex justify-between space-x-2 mt-5">
                                 <button

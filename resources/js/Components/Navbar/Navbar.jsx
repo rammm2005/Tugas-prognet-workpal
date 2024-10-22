@@ -133,7 +133,7 @@ export default function Navbar({ user }) {
                                 </div>
                             )}
                             {profileMenuOpen && (
-                                <div className="absolute right-0 top-16 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                <div className="absolute right-0 z-[30] top-16 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                     <div className="py-1">
                                         <Link href='' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Profile

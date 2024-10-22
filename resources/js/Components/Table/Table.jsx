@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiEdit, FiTrash, FiEye, FiPlusCircle } from 'react-icons/fi';
 
-const Table = ({ columns, data, onEdit, onDelete, onShow, onCreate }) => {
+const Table = ({ columns, data, onEdit, onDelete, onShow, onCreate, action = true }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilteredData] = useState(data);
     const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
@@ -161,7 +161,12 @@ const Table = ({ columns, data, onEdit, onDelete, onShow, onCreate }) => {
                                 </th>
                             )
                         ))}
-                        <th className="border border-slate-300 px-4 py-2">Actions</th>
+                        {
+                            action ? (
+                                <th className="border border-slate-300 px-4 py-2">Actions</th>
+
+                            ) : null
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -175,26 +180,28 @@ const Table = ({ columns, data, onEdit, onDelete, onShow, onCreate }) => {
                                         </td>
                                     )
                                 ))}
-                                <td className="border border-slate-300 px-4 py-2 flex space-x-2">
-                                    <button
-                                        className="text-blue-500 hover:text-blue-600"
-                                        onClick={() => onShow(row)}
-                                    >
-                                        <FiEye size={20} />
-                                    </button>
-                                    <button
-                                        className="text-yellow-500 hover:text-yellow-600"
-                                        onClick={() => onEdit(row)}
-                                    >
-                                        <FiEdit size={20} />
-                                    </button>
-                                    <button
-                                        className="text-red-500 hover:text-red-600"
-                                        onClick={() => onDelete(row.id)}
-                                    >
-                                        <FiTrash size={20} />
-                                    </button>
-                                </td>
+                                {action ? (
+                                    <td className="border border-slate-300 px-4 py-2 flex space-x-2">
+                                        <button
+                                            className="text-blue-500 hover:text-blue-600"
+                                            onClick={() => onShow(row)}
+                                        >
+                                            <FiEye size={20} />
+                                        </button>
+                                        <button
+                                            className="text-yellow-500 hover:text-yellow-600"
+                                            onClick={() => onEdit(row)}
+                                        >
+                                            <FiEdit size={20} />
+                                        </button>
+                                        <button
+                                            className="text-red-500 hover:text-red-600"
+                                            onClick={() => onDelete(row.id)}
+                                        >
+                                            <FiTrash size={20} />
+                                        </button>
+                                    </td>
+                                ) : null}
                             </tr>
                         ))
                     ) : (
